@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Oswald&family=Roboto&display=swap" rel="stylesheet">
+    <title>Dungeons & Dishes Quiz</title>
+</head>
+<body>
+    <div class="container-fluid containernomargin">
+        <div class="row header"> 
+            <div class="col-12 title">Dungeons & Dishes Quizz</div>
+            <div class="col-12 title2">Welcome traveler and enjoy your stay!</div>
+        </div>
+
+        <div class="row header2"> 
+            <div class="col-12 title3">Find out which fantasy RPG class you are!</div>
+
+        </div>
+
+        <div class="row quizbody">
+            <div class="col-12 quizbox">
+                <div class="quizquestions">
+                    <h4 id="quiztitle">A quiz designed to satisfy your inner glutton.</h4>
+                    <br>
+                </div>
+                <div>
+                    <p class="quizanswers" id="quizanswers">
+                        Everyone loves good food, right? What if you could find out which RPG class you are according to your own food preferences? Worry not, it's time for your discovery!
+                        <br><br>
+                        You will have to choose which option suits you well among the various statements from our previous adventures that passed through the tavern.
+                        <br>
+                        <br>
+                        Luckily, in the end, we can find out what kind of adventurer you are!   
+                    </p>
+
+                    <div id="quizquestions" class="d-none">
+                        <div class="quizanswerlines">
+                            <input type="radio" name="quizanswer" value="0" id="quizanswer0"> <label for="quizanswer0" id="quizlabel0"></label>
+                            <br>
+                        </div>
+                        <div class="quizanswerlines">
+                            <input type="radio" name="quizanswer" value="1" id="quizanswer1"> <label for="quizanswer1" id="quizlabel1"></label>
+                            <br>
+                        </div>
+                        <div class="quizanswerlines">
+                            <input type="radio" name="quizanswer" value="2" id="quizanswer2"> <label for="quizanswer2" id="quizlabel2"></label>
+                            <br>
+                        </div>
+                        <div class="quizanswerlines">
+                            <input type="radio" name="quizanswer" value="3" id="quizanswer3"> <label for="quizanswer3" id="quizlabel3"></label>
+                            <br>
+                        </div>
+                    </div>
+                    <input id="quizbutton" type="button" value="Begin Adventure" class="btn btn-dark" onclick="startQuiz()"/>
+                </div> 
+            </div> 
+        </div>
+
+        <div class="row header2"> 
+            <div class="col-12 title4">
+                <h5>
+                    Please enjoy our quiz, for now it's just a test, but hopefully <br>
+                    soon we can come up with something even better for you.</div>
+                </h5>
+        </div>
+
+        <div class="row footer"> 
+            <div class="col-12 footer">Follow us for more on Instagram: @dungeonsandishes</div>
+        </div>
+
+    </div>
+
+    <script>
+        const quizquestions = [
+            {
+                title: "You just woke up, what would you like to have for breakfast?",
+                questions: [
+                    "Some berries and mushrooms I foraged yesterday, or perhaps even a fish from the river.",
+                    "It doesn't matter, as long as it's meat or greasy.",
+                    "Well, probably the cheapest meal the tavern has to offer, and wine, definitely wine! ",
+                    "Something simple with good nutrients to keep my mind working, food is trivial."
+                ]
+            },
+            {
+                title: "If your character wasn’t an adventurer, what livelihood would they lead?",
+                questions: [
+                    "A quiet and peaceful life on a cabin in the forest, or perhaps even a farmer's life.",
+                    "I would stay close to the ones dear to me and be a strong leader for my people.",
+                    "Is that even possible? a life without adventures?!",
+                    "It doesn't sound like a bad idea, I'd have more time to study."
+                ]
+            },
+            {
+                title: "If your character could go back in time and change one thing about their life, what would it be?",
+                questions: [
+                    "The day I let that ogre get the best of me.",
+                    "When I left my people I was too proud, now I see how much I miss them.",
+                    "I would have bet on the right centaur on that race and be rich by now.",
+                    "My only regret is not spending my entire youth in the search for more knowledge."
+                ]
+                
+            }, 
+            {
+                title: "Which of the strongest quality you have?",
+                questions: [
+                    "My perception",
+                    "My strength",
+                    "My charisma",
+                    "My intelligence."
+                ]
+                
+            },
+            {
+                title: "Is your character willing to risk the well-being of others in order to achieve their goal?",
+                questions: [
+                    "Only if it's necessary to save the wildlife or to eradicate an ogre lair.",
+                    "If they are not my friends or my people, no doubt.",
+                    "Life with a little bit of danger is more exciting for everyone, isn't it?",
+                    "I would do anything in my pursue for knowledge and power."
+                ]
+                
+            }
+        ];
+
+        let score = [ 0, 0, 0, 0 ];
+        let startIndex = 0;
+
+        function startQuiz() {
+            if (startIndex == 0) {
+                // hide initial text
+                document.getElementById('quizanswers').classList.toggle('d-none');
+
+                // show questions radio buttons
+                document.getElementById('quizquestions').classList.toggle('d-none');
+
+                // change button label
+                document.getElementById('quizbutton').value = 'Next';
+            }
+
+            // process scores
+            processQuiz();
+
+            // last question, submit quiz
+            if (startIndex == quizquestions.length) {
+                return submitQuiz();
+            }
+
+
+            // go to next question
+            let quiztitle = document.getElementById('quiztitle');
+            quiztitle.innerHTML = quizquestions[startIndex].title;
+
+            quizquestions[startIndex].questions.forEach(function (el, i) {
+                let label = document.getElementById('quizlabel' + i);
+                label.innerHTML = el;
+            });
+            // adds to the index starting position
+            startIndex++;
+
+            // change button label
+            if (startIndex == quizquestions.length) {
+                
+                document.getElementById('quizbutton').value = 'Submit';
+            }
+        }
+        
+        function processQuiz() {
+            let answers = document.getElementsByName('quizanswer');
+
+            answers.forEach(function (el, i) {
+                if (el.checked) {
+                    score[i]++;
+                }
+
+                el.checked = false;
+            });
+        }
+
+        function submitQuiz() {
+            let max = -1;
+            let selected = -1;
+
+            score.forEach(function (el, i) {
+                if (el > max) {
+                    max = el;
+                    selected = i;
+                }
+            });
+
+            let resultText = '';
+            let resultText2 = '';
+
+            switch (selected) {
+                case 0:
+                    resultText = "Congratulations for finishing your culinary adventure. It seems that you are a Ranger.";
+                    resultText2 = "Far from the bustle of cities and towns, past the hedges that shelter the most distant farms from the terrors of the wild, amid the dense-packed trees of trackless forests and across wide and empty plains, rangers keep their unending watch. Warriors of the wilderness, rangers specialize in hunting the monsters that threaten the edges of civilization—humanoid raiders, rampaging beasts and monstrosities, terrible giants, and deadly dragons. They learn to track their quarry as a predator does, moving stealthily through the wilds and hiding themselves in brush and rubble.";
+                    break;
+                case 1:
+                    resultText = "Congratulations for finishing your culinary adventure. It seems that you are a Barbarian.";
+                    resultText2 = "Barbarians, different as they might be, are defined by their rage: unbridled, unquenchable, and unthinking fury. More than a mere emotion, their anger is the ferocity of a cornered predator, the unrelenting assault of a storm, the churning turmoil of the sea. For some, their rage springs from a communion with fierce animal spirits. Others draw from a roiling reservoir of anger at a world full of pain. For every barbarian, rage is a power that fuels not just a battle frenzy but also uncanny reflexes, resilience, and feats of strength.";
+                    break;
+                case 2:
+                    resultText = "Congratulations for finishing your culinary adventure. It seems that you are a Bard.";
+                    resultText2 = 'The greatest strength of bards is their sheer versatility. Words and music are not just vibrations of air, but vocalizations with power all their own. The bard is a master of song, speech, and the magic they contain. Bards say that the multiverse was spoken into existence, that the words of the gods gave it shape, and that echoes of these primordial Words of Creation still resound throughout the cosmos. The music of bards is an attempt to snatch and harness those echoes, subtly woven into their spells and powers.';
+                    break;
+                case 3:
+                    resultText = "Congratulations for finishing your culinary adventure. It seems that you are a Wizard.";
+                    resultText2 = "Wizards are supreme magic-users, defined and united as a class by the spells they cast. Drawing on the subtle weave of magic that permeates the cosmos, wizards cast spells of explosive fire, arcing lightning, subtle deception, and brute-force mind control. Their magic conjures monsters from other planes of existence, glimpses the future, or turns slain foes into zombies. Their mightiest spells change one substance into another, call meteors down from the sky, or open portals to other worlds.";
+                    break;
+            }
+
+            //after finishing
+
+            document.getElementById('quiztitle').innerHTML = (resultText)
+            
+            document.getElementById('quizanswers').innerHTML = resultText2;
+
+             // hide initial text
+            document.getElementById('quizanswers').classList.toggle('d-none');
+
+            // show questions radio buttons
+            document.getElementById('quizquestions').classList.toggle('d-none');
+    
+            document.getElementById('quizbutton').value = 'New Adventure';
+            
+
+            if (startIndex == quizquestions.length) {
+                startQuiz = retakeQuiz;
+            }
+
+            function retakeQuiz() {
+                window.location.reload();
+            }
+
+        }
+
+
+    </script>
+
+</body>
+</html>
+
+   
